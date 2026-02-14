@@ -55,18 +55,32 @@ function migrateData() {
     }
 }
 
-// Load data from localStorage
-function loadData() {
+// Load data from localStorage and Server
+async function loadData() {
     migrateData();
 
-    const saved = localStorage.getItem('carStorageDataV2');
-    if (saved) {
-        const data = JSON.parse(saved);
-        vehicles = data.vehicles || [];
-        vehicleData = data.vehicleData || {};
+    // 1. Try to load from server first
+    try {
+        const response = await fetch('/api/load-all');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.vehicles && data.vehicles.length > 0) {
+                vehicles = data.vehicles;
+                vehicleData = data.vehicleData;
+                console.log('Data loaded from server files');
+            }
+        }
+    } catch (error) {
+        console.warn('Server not available, falling back to LocalStorage:', error);
+        const saved = localStorage.getItem('carStorageDataV2');
+        if (saved) {
+            const data = JSON.parse(saved);
+            vehicles = data.vehicles || [];
+            vehicleData = data.vehicleData || {};
+        }
     }
 
-    // If no vehicles, create default
+    // If still no vehicles, create default
     if (vehicles.length === 0) {
         const defaultVehicle = {
             id: 'default-vehicle',
@@ -90,13 +104,34 @@ function loadData() {
     renderVehicleImage();
 }
 
-// Save data to localStorage
-function saveData() {
+// Save data to localStorage and Server
+async function saveData() {
+    // 1. Save to LocalStorage (Always)
     const data = {
         vehicles: vehicles,
         vehicleData: vehicleData
     };
     localStorage.setItem('carStorageDataV2', JSON.stringify(data));
+
+    // 2. Save to Server (Individual files by plate number)
+    try {
+        for (const vehicle of vehicles) {
+            const payload = {
+                plateNumber: vehicle.plateNumber,
+                vehicle: vehicle,
+                items: vehicleData[vehicle.id] ? vehicleData[vehicle.id].items || [] : []
+            };
+
+            await fetch('/api/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        }
+        console.log('Data synced to server files');
+    } catch (error) {
+        console.error('Failed to sync to server:', error);
+    }
 }
 
 // ==================== Vehicle Management ====================
