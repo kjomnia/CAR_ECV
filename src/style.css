@@ -1110,7 +1110,7 @@
             border: 1px solid var(--border-color);
         }
 
-        .location-marker:hover .marker-popup {
+        .location-marker.active .marker-popup {
             display: block;
         }
 

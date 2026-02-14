@@ -904,10 +904,10 @@ function renderLocationMarkers() {
         `;
 
         return `
-            <div class="location-marker ${sideClass}" style="left: ${coords.x}%; top: ${coords.y}%;" onclick="filterByLocation('${location}')">
+            <div class="location-marker ${sideClass}" style="left: ${coords.x}%; top: ${coords.y}%;" onclick="toggleMarkerPopup(event, this)">
                 <div class="marker-main">
                     <div class="marker-badge ${count === 0 ? 'empty' : ''}">${count}</div>
-                    <button class="marker-view-btn">보기</button>
+                    <button class="marker-view-btn">클릭</button>
                 </div>
                 ${popupContent}
             </div>
@@ -915,6 +915,18 @@ function renderLocationMarkers() {
     }).join('');
 
     markersContainer.innerHTML = markersHtml;
+}
+
+function toggleMarkerPopup(event, element) {
+    // Toggle active class to show/hide popup
+    const isActive = element.classList.contains('active');
+
+    // Close all other markers first for clean UI
+    document.querySelectorAll('.location-marker.active').forEach(m => {
+        if (m !== element) m.classList.remove('active');
+    });
+
+    element.classList.toggle('active');
 }
 
 function removeVehicleImage() {
