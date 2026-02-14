@@ -795,12 +795,12 @@ function handleFileImport(event) {
 // ==================== Vehicle Image Management ====================
 // Location coordinates (percentage based for SVG)
 const locationCoordinates = {
-    'frontseat-left': { x: 35, y: 46 },
-    'frontseat-right': { x: 65, y: 46 },
-    'backseat-left': { x: 35, y: 70 },
-    'backseat-right': { x: 65, y: 70 },
-    'trunk-left': { x: 42, y: 88 },
-    'trunk-right': { x: 58, y: 88 }
+    'frontseat-left': { x: 42, y: 46 },
+    'frontseat-right': { x: 58, y: 46 },
+    'backseat-left': { x: 42, y: 64 },
+    'backseat-right': { x: 58, y: 64 },
+    'trunk-left': { x: 42, y: 85 },
+    'trunk-right': { x: 58, y: 85 }
 };
 
 function triggerImageUpload() {
