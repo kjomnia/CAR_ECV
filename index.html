@@ -104,54 +104,24 @@
                 <section class="vehicle-image-section" id="vehicleImageSection">
                     <h2 class="section-title">📸 장비 위치 확인</h2>
                     <div class="vehicle-image-container" id="vehicleImageContainer">
-                        <!-- Default SVG Car Image -->
-                        <svg id="vehicleImage" viewBox="0 0 300 550"
-                            style="width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto;">
-                            <!-- Car Body -->
-                            <rect x="50" y="50" width="200" height="450" rx="40" fill="none" stroke="#9b59b6"
-                                stroke-width="3" />
-                            <!-- Front (Hood) -->
-                            <ellipse cx="150" cy="60" rx="60" ry="20" fill="none" stroke="#9b59b6" stroke-width="2" />
-                            <!-- Windshield -->
-                            <path d="M 80 110 Q 150 95 220 110" fill="none" stroke="#9b59b6" stroke-width="2" />
-                            <!-- Front Seat Group -->
-                            <g class="clickable-zone" onclick="navigateToZone('frontseat')" style="cursor: pointer;">
-                                <rect x="60" y="120" width="180" height="90" rx="5" fill="rgba(155, 89, 182, 0.05)"
-                                    stroke="#9b59b6" stroke-width="1" stroke-dasharray="5,5" />
-                                <text x="150" y="170" text-anchor="middle" fill="#9b59b6" font-size="14"
-                                    font-weight="600">앞자리</text>
-                            </g>
-                            <!-- Middle Divider -->
-                            <line x1="70" y1="220" x2="230" y2="220" stroke="#9b59b6" stroke-width="1"
-                                stroke-dasharray="3,3" />
-                            <!-- Backseat Group -->
-                            <g class="clickable-zone" onclick="navigateToZone('backseat')" style="cursor: pointer;">
-                                <rect x="60" y="230" width="180" height="100" rx="5" fill="rgba(155, 89, 182, 0.05)"
-                                    stroke="#9b59b6" stroke-width="1" stroke-dasharray="5,5" />
-                                <text x="150" y="285" text-anchor="middle" fill="#9b59b6" font-size="14"
-                                    font-weight="600">뒷자리</text>
-                            </g>
-                            <!-- Trunk Divider -->
-                            <line x1="70" y1="340" x2="230" y2="340" stroke="#9b59b6" stroke-width="1"
-                                stroke-dasharray="3,3" />
-                            <!-- Trunk Group -->
-                            <g class="clickable-zone" onclick="navigateToZone('trunk')" style="cursor: pointer;">
-                                <rect x="60" y="350" width="180" height="120" rx="5" fill="rgba(155, 89, 182, 0.05)"
-                                    stroke="#9b59b6" stroke-width="1" stroke-dasharray="5,5" />
-                                <text x="150" y="415" text-anchor="middle" fill="#9b59b6" font-size="14"
-                                    font-weight="600">트렁크</text>
-                            </g>
-                            <!-- Side Mirrors -->
-                            <ellipse cx="35" cy="150" rx="15" ry="10" fill="none" stroke="#9b59b6" stroke-width="2" />
-                            <ellipse cx="265" cy="150" rx="15" ry="10" fill="none" stroke="#9b59b6" stroke-width="2" />
-                            <!-- Wheels -->
-                            <circle cx="70" cy="130" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
-                            <circle cx="230" cy="130" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
-                            <circle cx="70" cy="450" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
-                            <circle cx="230" cy="450" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
-                            <!-- Rear -->
-                            <path d="M 80 490 Q 150 500 220 490" fill="none" stroke="#9b59b6" stroke-width="2" />
-                        </svg>
+                        <!-- New Image Base Layout -->
+                        <div class="vehicle-visual-wrapper">
+                            <img src="./src/car_view.png" id="vehicleImage" alt="Vehicle Layout">
+
+                            <!-- Clickable Overlay Zones -->
+                            <div class="overlay-zones">
+                                <div class="zone-overlay front" onclick="navigateToZone('frontseat')" title="앞자리">
+                                    <span>앞자리</span>
+                                </div>
+                                <div class="zone-overlay back" onclick="navigateToZone('backseat')" title="뒷자리">
+                                    <span>뒷자리</span>
+                                </div>
+                                <div class="zone-overlay trunk" onclick="navigateToZone('trunk')" title="트렁크">
+                                    <span>트렁크</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="location-markers" id="locationMarkers">
                             <!-- Markers will be dynamically generated -->
                         </div>
@@ -200,9 +170,6 @@
                             <div class="trunk-areas">
                                 <div class="location-zone" onclick="filterByLocation('trunk-left')">
                                     좌측<br><small id="count-trunk-left">0개</small>
-                                </div>
-                                <div class="location-zone" onclick="filterByLocation('trunk-center')">
-                                    중앙<br><small id="count-trunk-center">0개</small>
                                 </div>
                                 <div class="location-zone" onclick="filterByLocation('trunk-right')">
                                     우측<br><small id="count-trunk-right">0개</small>
@@ -309,9 +276,6 @@
                         </div>
                         <div class="location-option" onclick="selectLocation('trunk-left')">
                             📦 트렁크 좌측
-                        </div>
-                        <div class="location-option" onclick="selectLocation('trunk-center')">
-                            📦 트렁크 중앙
                         </div>
                         <div class="location-option" onclick="selectLocation('trunk-right')">
                             📦 트렁크 우측

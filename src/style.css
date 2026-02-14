@@ -75,6 +75,13 @@
             line-height: 1.6;
             min-height: 100vh;
             padding: var(--spacing-lg);
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        html {
+            overflow-x: hidden;
+            width: 100%;
         }
 
         /* ==================== Container ==================== */
@@ -103,12 +110,13 @@
             content: '';
             position: absolute;
             top: -50%;
-            right: -10%;
+            right: -50px;
             width: 300px;
             height: 300px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             animation: float 6s ease-in-out infinite;
+            pointer-events: none;
         }
 
         @keyframes float {
@@ -370,7 +378,7 @@
 
         .trunk-areas {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: var(--spacing-md);
         }
 
@@ -919,8 +927,60 @@
         .vehicle-image-container img {
             width: 100%;
             height: auto;
-            border-radius: var(--radius-lg);
             display: block;
+            margin: 0 auto;
+            max-width: 500px;
+        }
+
+        .vehicle-visual-wrapper {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .overlay-zones {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+
+        .zone-overlay {
+            position: absolute;
+            width: 80%;
+            left: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            color: transparent;
+            font-weight: 700;
+            border: 2px dashed transparent;
+            border-radius: var(--radius-md);
+        }
+
+        .zone-overlay:hover {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .zone-overlay.front {
+            top: 38%;
+            height: 18%;
+        }
+
+        .zone-overlay.back {
+            top: 62%;
+            height: 18%;
+        }
+
+        .zone-overlay.trunk {
+            top: 80%;
+            height: 15%;
         }
 
         .location-markers {
@@ -938,6 +998,7 @@
             pointer-events: all;
             cursor: pointer;
             transition: all var(--transition-base);
+            z-index: 10;
         }
 
         .marker-badge {

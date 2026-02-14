@@ -537,7 +537,6 @@ function updateStats() {
     const backseatLeft = items.filter(i => i.location === 'backseat-left').length;
     const backseatRight = items.filter(i => i.location === 'backseat-right').length;
     const trunkLeft = items.filter(i => i.location === 'trunk-left').length;
-    const trunkCenter = items.filter(i => i.location === 'trunk-center').length;
     const trunkRight = items.filter(i => i.location === 'trunk-right').length;
 
     // Update individual counts
@@ -551,13 +550,12 @@ function updateStats() {
     updateCount('count-backseat-left', backseatLeft);
     updateCount('count-backseat-right', backseatRight);
     updateCount('count-trunk-left', trunkLeft);
-    updateCount('count-trunk-center', trunkCenter);
     updateCount('count-trunk-right', trunkRight);
 
     // Update area totals
     document.getElementById('frontseatCount').textContent = frontseatLeft + frontseatRight;
     document.getElementById('backseatCount').textContent = backseatLeft + backseatRight;
-    document.getElementById('trunkCount').textContent = trunkLeft + trunkCenter + trunkRight;
+    document.getElementById('trunkCount').textContent = trunkLeft + trunkRight;
 
     // Category stats
     const categories = {};
@@ -797,13 +795,12 @@ function handleFileImport(event) {
 // ==================== Vehicle Image Management ====================
 // Location coordinates (percentage based for SVG)
 const locationCoordinates = {
-    'frontseat-left': { x: 35, y: 30 },
-    'frontseat-right': { x: 65, y: 30 },
-    'backseat-left': { x: 35, y: 52 },
-    'backseat-right': { x: 65, y: 52 },
-    'trunk-left': { x: 30, y: 76 },
-    'trunk-center': { x: 50, y: 76 },
-    'trunk-right': { x: 70, y: 76 }
+    'frontseat-left': { x: 35, y: 46 },
+    'frontseat-right': { x: 65, y: 46 },
+    'backseat-left': { x: 35, y: 70 },
+    'backseat-right': { x: 65, y: 70 },
+    'trunk-left': { x: 42, y: 88 },
+    'trunk-right': { x: 58, y: 88 }
 };
 
 function triggerImageUpload() {
@@ -840,7 +837,16 @@ function handleVehicleImageUpload(event) {
 }
 
 function renderVehicleImage() {
-    // Always render markers since we have a default SVG image
+    const container = document.getElementById('vehicleImageContainer');
+    const currentVehicle = vehicles.find(v => v.id === currentVehicleId);
+    const imgEl = document.getElementById('vehicleImage');
+
+    if (currentVehicle && currentVehicle.vehicleImage) {
+        imgEl.src = currentVehicle.vehicleImage;
+    } else {
+        imgEl.src = './src/car_view.png';
+    }
+
     renderLocationMarkers();
 }
 
