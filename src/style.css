@@ -102,6 +102,7 @@
             padding: var(--spacing-xl);
             color: white;
             position: relative;
+            z-index: 400;
             border-radius: var(--radius-xl) var(--radius-xl) 0 0;
             /* Match container radius */
         }
