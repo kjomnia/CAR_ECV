@@ -679,8 +679,11 @@
             margin-top: var(--spacing-xl);
         }
 
-        .btn {
+        .modal-actions .btn {
             flex: 1;
+        }
+
+        .btn {
             padding: var(--spacing-md) var(--spacing-lg);
             border: none;
             border-radius: var(--radius-md);
