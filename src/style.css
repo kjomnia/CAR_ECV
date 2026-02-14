@@ -966,32 +966,99 @@
             transition: all var(--transition-base);
             z-index: 20;
             /* Increased to stay above image */
+            display: flex;
+            align-items: center;
         }
 
-        /* Increase touch target size without changing visual size */
+        /* Marker main content container */
+        .marker-main {
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            gap: var(--spacing-xs);
+            transition: all var(--transition-base);
+            position: relative;
+            z-index: 2;
+        }
+
+        .location-marker:hover .marker-main {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        /* Flip button order: LEFT side should have button on the LEFT (outer) */
+        .location-marker.left-side .marker-main {
+            flex-direction: row-reverse;
+        }
+
+        /* RIGHT side should have button on the RIGHT (outer) */
+        .location-marker.right-side .marker-main {
+            flex-direction: row;
+        }
+
+        /* Side-specific expanded clickable areas (Red boxes from screenshot) */
         .location-marker::after {
             content: '';
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
+            height: 64px;
+            width: 120px;
+            /* Slightly reduced to prevent central touch overlap */
+            background: transparent;
+            /* Make it completely transparent as requested */
+            transform: translateY(-50%);
+            z-index: 1;
+            transition: background 0.2s ease;
+            pointer-events: all;
+        }
+
+        /* Prevent central overlap by making them only expand OUTWARDS */
+        .location-marker.left-side::after {
+            right: 0;
+            /* Align right edge to marker center, expand left */
+            border-radius: var(--radius-md) 0 0 var(--radius-md);
+        }
+
+        .location-marker.right-side::after {
+            left: 0;
+            /* Align left edge to marker center, expand right */
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        /* Completely transparent even on hover as requested */
+        .location-marker:hover::after {
+            background: transparent;
+        }
+
+        .marker-view-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
         }
 
         .marker-badge {
             background: var(--primary-color);
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1rem;
-            box-shadow: var(--shadow-lg);
-            border: 3px solid white;
+            font-size: 0.9rem;
+            /* Remove border-white to make it cleaner inside the pill */
         }
 
         .location-marker:hover .marker-badge {

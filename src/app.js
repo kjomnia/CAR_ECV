@@ -795,12 +795,12 @@ function handleFileImport(event) {
 // ==================== Vehicle Image Management ====================
 // Location coordinates (percentage based for SVG)
 const locationCoordinates = {
-    'frontseat-left': { x: 42, y: 46 },
-    'frontseat-right': { x: 58, y: 46 },
-    'backseat-left': { x: 42, y: 64 },
-    'backseat-right': { x: 58, y: 64 },
-    'trunk-left': { x: 42, y: 85 },
-    'trunk-right': { x: 58, y: 85 }
+    'frontseat-left': { x: 32, y: 46 },
+    'frontseat-right': { x: 68, y: 46 },
+    'backseat-left': { x: 32, y: 64 },
+    'backseat-right': { x: 68, y: 64 },
+    'trunk-left': { x: 32, y: 85 },
+    'trunk-right': { x: 68, y: 85 }
 };
 
 function triggerImageUpload() {
@@ -875,6 +875,7 @@ function renderLocationMarkers() {
         const coords = locationCoordinates[location];
         const count = locationCounts[location] || 0;
         const locationItems = items.filter(item => item.location === location);
+        const sideClass = location.includes('left') ? 'left-side' : 'right-side';
 
         const categoryIcons = {
             '공구': '🔧',
@@ -903,8 +904,11 @@ function renderLocationMarkers() {
         `;
 
         return `
-            <div class="location-marker" style="left: ${coords.x}%; top: ${coords.y}%;">
-                <div class="marker-badge ${count === 0 ? 'empty' : ''}">${count}</div>
+            <div class="location-marker ${sideClass}" style="left: ${coords.x}%; top: ${coords.y}%;" onclick="filterByLocation('${location}')">
+                <div class="marker-main">
+                    <div class="marker-badge ${count === 0 ? 'empty' : ''}">${count}</div>
+                    <button class="marker-view-btn">보기</button>
+                </div>
                 ${popupContent}
             </div>
         `;
