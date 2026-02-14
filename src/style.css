@@ -948,42 +948,7 @@
             z-index: 5;
         }
 
-        .zone-overlay {
-            position: absolute;
-            width: 80%;
-            left: 10%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            color: transparent;
-            font-weight: 700;
-            border: 2px dashed transparent;
-            border-radius: var(--radius-md);
-        }
-
-        .zone-overlay:hover {
-            background: rgba(99, 102, 241, 0.15);
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .zone-overlay.front {
-            top: 38%;
-            height: 18%;
-        }
-
-        .zone-overlay.back {
-            top: 56%;
-            height: 18%;
-        }
-
-        .zone-overlay.trunk {
-            top: 77%;
-            height: 15%;
-        }
-
+        /* Removed zone-overlay styles as they are no longer used */
         .location-markers {
             position: absolute;
             top: 0;
@@ -999,7 +964,19 @@
             pointer-events: all;
             cursor: pointer;
             transition: all var(--transition-base);
-            z-index: 10;
+            z-index: 20;
+            /* Increased to stay above image */
+        }
+
+        /* Increase touch target size without changing visual size */
+        .location-marker::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
         }
 
         .marker-badge {
