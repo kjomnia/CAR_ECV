@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>차량 물건 관리</title>
+    <link rel="stylesheet" href="./src/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-top">
+                    <h1 onclick="switchView('layout')" style="cursor: pointer;">
+                        🚗 차량 물건 관리
+                    </h1>
+                    <div class="header-actions">
+                        <div class="menu-container">
+                            <button class="icon-btn" onclick="toggleMainMenu()" title="메뉴">
+                                ☰
+                            </button>
+                            <div class="main-menu-dropdown" id="mainMenuDropdown">
+                                <div class="menu-section">
+                                    <div class="menu-label">보기 모드</div>
+                                    <div class="menu-item active" onclick="switchView('layout')">
+                                        <span>🗺️</span> 장비 위치 확인
+                                    </div>
+                                    <div class="menu-item" onclick="switchView('list')">
+                                        <span>📋</span> 물건 목록
+                                    </div>
+                                    <div class="menu-item" onclick="switchView('stats')">
+                                        <span>📊</span> 통계
+                                    </div>
+                                    <div class="menu-item" onclick="switchView('zones')">
+                                        <span>🏗️</span> 구역별 현황
+                                    </div>
+                                    <div class="menu-item" onclick="switchView('category')">
+                                        <span>️</span> 카테고리별
+                                    </div>
+                                </div>
+                                <div class="menu-separator"></div>
+                                <div class="menu-section">
+                                    <div class="menu-label">설정 및 관리</div>
+                                    <div class="menu-item" onclick="openVehicleManagement()">
+                                        <span>⚙️</span> 차량 관리
+                                    </div>
+                                    <div class="menu-item" onclick="toggleTheme()">
+                                        <span>🌙</span> 테마 전환
+                                    </div>
+                                    <div class="menu-item" onclick="exportData()">
+                                        <span>📥</span> 데이터 내보내기
+                                    </div>
+                                    <div class="menu-item" onclick="importData()">
+                                        <span>📤</span> 데이터 가져오기
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-filter-bar">
+                    <div class="vehicle-selector">
+                        <div class="vehicle-current" onclick="toggleVehicleDropdown()">
+                            <span>🚗</span>
+                            <span id="currentVehicleName">차량 선택</span>
+                            <span style="margin-left: auto;">▼</span>
+                        </div>
+                        <div class="vehicle-dropdown" id="vehicleDropdown">
+                            <!-- Vehicle options will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-selector">
+                            <div class="filter-current" onclick="toggleFilterDropdown()">
+                                <span id="currentFilterName">전체</span>
+                                <span style="margin-left: auto;">▼</span>
+                            </div>
+                            <div class="filter-dropdown" id="filterDropdown">
+                                <div class="filter-option selected" onclick="selectFilter('all')">전체</div>
+                                <div class="filter-option" onclick="selectFilter('frontseat')">앞자리</div>
+                                <div class="filter-option" onclick="selectFilter('backseat')">뒷자리</div>
+                                <div class="filter-option" onclick="selectFilter('trunk')">트렁크</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="물건 검색..." oninput="filterItems()">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content (Views) -->
+        <main class="main-content">
+            <!-- View: Vehicle Layout -->
+            <div id="view-layout" class="view-container active">
+                <!-- Vehicle Image Section -->
+                <section class="vehicle-image-section" id="vehicleImageSection">
+                    <h2 class="section-title">📸 장비 위치 확인</h2>
+                    <div class="vehicle-image-container" id="vehicleImageContainer">
+                        <!-- Default SVG Car Image -->
+                        <svg id="vehicleImage" viewBox="0 0 300 550"
+                            style="width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto;">
+                            <!-- Car Body -->
+                            <rect x="50" y="50" width="200" height="450" rx="40" fill="none" stroke="#9b59b6"
+                                stroke-width="3" />
+                            <!-- Front (Hood) -->
+                            <ellipse cx="150" cy="60" rx="60" ry="20" fill="none" stroke="#9b59b6" stroke-width="2" />
+                            <!-- Windshield -->
+                            <path d="M 80 110 Q 150 95 220 110" fill="none" stroke="#9b59b6" stroke-width="2" />
+                            <!-- Front Seat Group -->
+                            <g class="clickable-zone" onclick="navigateToZone('frontseat')" style="cursor: pointer;">
+                                <rect x="60" y="120" width="180" height="90" rx="5" fill="rgba(155, 89, 182, 0.05)"
+                                    stroke="#9b59b6" stroke-width="1" stroke-dasharray="5,5" />
+                                <text x="150" y="170" text-anchor="middle" fill="#9b59b6" font-size="14"
+                                    font-weight="600">앞자리</text>
+                            </g>
+                            <!-- Middle Divider -->
+                            <line x1="70" y1="220" x2="230" y2="220" stroke="#9b59b6" stroke-width="1"
+                                stroke-dasharray="3,3" />
+                            <!-- Backseat Group -->
+                            <g class="clickable-zone" onclick="navigateToZone('backseat')" style="cursor: pointer;">
+                                <rect x="60" y="230" width="180" height="100" rx="5" fill="rgba(155, 89, 182, 0.05)"
+                                    stroke="#9b59b6" stroke-width="1" stroke-dasharray="5,5" />
+                                <text x="150" y="285" text-anchor="middle" fill="#9b59b6" font-size="14"
+                                    font-weight="600">뒷자리</text>
+                            </g>
+                            <!-- Trunk Divider -->
+                            <line x1="70" y1="340" x2="230" y2="340" stroke="#9b59b6" stroke-width="1"
+                                stroke-dasharray="3,3" />
+                            <!-- Trunk Group -->
+                            <g class="clickable-zone" onclick="navigateToZone('trunk')" style="cursor: pointer;">
+                                <rect x="60" y="350" width="180" height="120" rx="5" fill="rgba(155, 89, 182, 0.05)"
+                                    stroke="#9b59b6" stroke-width="1" stroke-dasharray="5,5" />
+                                <text x="150" y="415" text-anchor="middle" fill="#9b59b6" font-size="14"
+                                    font-weight="600">트렁크</text>
+                            </g>
+                            <!-- Side Mirrors -->
+                            <ellipse cx="35" cy="150" rx="15" ry="10" fill="none" stroke="#9b59b6" stroke-width="2" />
+                            <ellipse cx="265" cy="150" rx="15" ry="10" fill="none" stroke="#9b59b6" stroke-width="2" />
+                            <!-- Wheels -->
+                            <circle cx="70" cy="130" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
+                            <circle cx="230" cy="130" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
+                            <circle cx="70" cy="450" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
+                            <circle cx="230" cy="450" r="20" fill="none" stroke="#9b59b6" stroke-width="3" />
+                            <!-- Rear -->
+                            <path d="M 80 490 Q 150 500 220 490" fill="none" stroke="#9b59b6" stroke-width="2" />
+                        </svg>
+                        <div class="location-markers" id="locationMarkers">
+                            <!-- Markers will be dynamically generated -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- View: Zone Status -->
+            <div id="view-zones" class="view-container">
+                <section class="car-layout-section">
+                    <h2 class="section-title">구역별 현황</h2>
+                    <div class="car-visual">
+                        <div class="car-area">
+                            <div class="car-area-title">
+                                <span>🚗 앞자리</span>
+                                <span class="item-count" id="frontseatCount">0</span>
+                            </div>
+                            <div class="backseat-areas">
+                                <div class="location-zone" onclick="filterByLocation('frontseat-left')">
+                                    운전석<br><small id="count-frontseat-left">0개</small>
+                                </div>
+                                <div class="location-zone" onclick="filterByLocation('frontseat-right')">
+                                    조수석<br><small id="count-frontseat-right">0개</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="car-area">
+                            <div class="car-area-title">
+                                <span>🪑 뒷자리</span>
+                                <span class="item-count" id="backseatCount">0</span>
+                            </div>
+                            <div class="backseat-areas">
+                                <div class="location-zone" onclick="filterByLocation('backseat-left')">
+                                    좌측<br><small id="count-backseat-left">0개</small>
+                                </div>
+                                <div class="location-zone" onclick="filterByLocation('backseat-right')">
+                                    우측<br><small id="count-backseat-right">0개</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="car-area">
+                            <div class="car-area-title">
+                                <span>📦 트렁크</span>
+                                <span class="item-count" id="trunkCount">0</span>
+                            </div>
+                            <div class="trunk-areas">
+                                <div class="location-zone" onclick="filterByLocation('trunk-left')">
+                                    좌측<br><small id="count-trunk-left">0개</small>
+                                </div>
+                                <div class="location-zone" onclick="filterByLocation('trunk-center')">
+                                    중앙<br><small id="count-trunk-center">0개</small>
+                                </div>
+                                <div class="location-zone" onclick="filterByLocation('trunk-right')">
+                                    우측<br><small id="count-trunk-right">0개</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+    </div>
+
+    <!-- View: Items List -->
+    <div id="view-list" class="view-container">
+        <div class="view-header">
+            <h2 class="section-title">물건 목록</h2>
+            <button class="add-item-btn" onclick="openModal()"
+                style="padding: var(--spacing-sm) var(--spacing-lg); font-size: 1rem;">
+                ➕ 물건 추가
+            </button>
+        </div>
+        <div class="items-list" id="itemsList">
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <p>등록된 물건이 없습니다.<br>새 물건을 추가해보세요!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- View: Stats -->
+    <div id="view-stats" class="view-container">
+        <div class="stats-card">
+            <h3 class="section-title">통계</h3>
+            <div class="stat-item">
+                <span class="stat-label">총 물건 수</span>
+                <span class="stat-value" id="totalItems">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">카테고리 수</span>
+                <span class="stat-value" id="totalCategories">0</span>
+            </div>
+        </div>
+
+        <div class="stats-card" style="margin-top: var(--spacing-lg);">
+            <h3 class="section-title">카테고리별</h3>
+            <div id="categoryStats"></div>
+        </div>
+    </div>
+
+    <!-- View: By Category -->
+    <div id="view-category" class="view-container">
+        <div class="view-header">
+            <h2 class="section-title">카테고리별 보기</h2>
+            <button class="add-item-btn" onclick="openModal()"
+                style="padding: var(--spacing-sm) var(--spacing-lg); font-size: 1rem;">
+                ➕ 물건 추가
+            </button>
+        </div>
+        <div id="categoryViewContainer">
+            <!-- Dynamic content -->
+        </div>
+    </div>
+    </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="itemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">물건 추가</h3>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+
+            <form id="itemForm" onsubmit="saveItem(event)">
+                <div class="form-group">
+                    <label class="form-label">물건 이름 *</label>
+                    <input type="text" class="form-input" id="itemName" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">카테고리 *</label>
+                    <select class="form-select" id="itemCategory" required>
+                        <option value="공구">🔧 공구</option>
+                        <option value="비상용품">🚨 비상용품</option>
+                        <option value="레저용품">⚽ 레저용품</option>
+                        <option value="생활용품">🏠 생활용품</option>
+                        <option value="기타">📌 기타</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">위치 *</label>
+                    <div class="location-grid">
+                        <div class="location-option" onclick="selectLocation('frontseat-left')">
+                            🚗 앞자리 운전석
+                        </div>
+                        <div class="location-option" onclick="selectLocation('frontseat-right')">
+                            🚗 앞자리 조수석
+                        </div>
+                        <div class="location-option" onclick="selectLocation('backseat-left')">
+                            🪑 뒷자리 좌측
+                        </div>
+                        <div class="location-option" onclick="selectLocation('backseat-right')">
+                            🪑 뒷자리 우측
+                        </div>
+                        <div class="location-option" onclick="selectLocation('trunk-left')">
+                            📦 트렁크 좌측
+                        </div>
+                        <div class="location-option" onclick="selectLocation('trunk-center')">
+                            📦 트렁크 중앙
+                        </div>
+                        <div class="location-option" onclick="selectLocation('trunk-right')">
+                            📦 트렁크 우측
+                        </div>
+                    </div>
+                    <input type="hidden" id="itemLocation" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">수량</label>
+                    <input type="number" class="form-input" id="itemQuantity" value="1" min="1">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">메모</label>
+                    <textarea class="form-textarea" id="itemMemo" placeholder="추가 정보를 입력하세요..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeVehicleModal()">취소</button>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vehicle Management Modal -->
+    <div class="modal" id="vehicleManagementModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">차량 관리</h3>
+                <button class="close-btn" onclick="closeVehicleManagement()">×</button>
+            </div>
+
+            <div id="vehiclesList">
+                <!-- Vehicle cards will be populated here -->
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: var(--spacing-md);"
+                onclick="openVehicleModal()">
+                ➕ 새 차량 추가
+            </button>
+        </div>
+    </div>
+
+    <!-- Vehicle Add/Edit Modal -->
+    <div class="modal" id="vehicleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="vehicleModalTitle">차량 추가</h3>
+                <button class="close-btn" onclick="closeVehicleModal()">×</button>
+            </div>
+
+            <form id="vehicleForm" onsubmit="saveVehicle(event)">
+                <div class="form-group">
+                    <label class="form-label">차량 번호 *</label>
+                    <input type="text" class="form-input" id="vehiclePlateNumber" placeholder="예: 12가3456" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">차량명 (별칭)</label>
+                    <input type="text" class="form-input" id="vehicleName" placeholder="예: 내 차">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">차종</label>
+                    <input type="text" class="form-input" id="vehicleType" placeholder="예: SUV, 세단">
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="vehicleIsDefault">
+                    <label for="vehicleIsDefault">기본 차량으로 설정</label>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeVehicleModal()">취소</button>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="fileInput" accept=".xlsx, .xls" style="display: none;" onchange="handleFileImport(event)">
+
+    <!-- SheetJS Library -->
+    <script src="./src/lib/xlsx.full.min.js"></script>
+
+    <!-- Hidden file input for vehicle image -->
+    <input type="file" id="vehicleImageInput" accept="image/jpeg,image/png,image/jpg" style="display: none;"
+        onchange="handleVehicleImageUpload(event)">
+
+    <script src="./src/app.js"></script>
+
+</body>
+
+</html>
