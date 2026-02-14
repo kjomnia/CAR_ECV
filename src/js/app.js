@@ -879,7 +879,7 @@ function renderVehicleImage() {
     if (currentVehicle && currentVehicle.vehicleImage) {
         imgEl.src = currentVehicle.vehicleImage;
     } else {
-        imgEl.src = './src/car_view.png';
+        imgEl.src = './src/img/car_view.png';
     }
 
     renderLocationMarkers();

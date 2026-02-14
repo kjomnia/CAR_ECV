@@ -5,7 +5,7 @@ import os
 import urllib.parse
 
 PORT = 8000
-DATA_DIR = "data"
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
